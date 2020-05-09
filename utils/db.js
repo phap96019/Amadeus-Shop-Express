@@ -17,8 +17,7 @@ const connectDB = () => {
       useCreateIndex: true,
       useFindAndModify: false,
       useUnifiedTopology: true,
-    })
-    .then(() => console.log('DB connection successful!'));
+    });
 };
 
 module.exports = connectDB;
