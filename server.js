@@ -9,7 +9,7 @@ dotenv.config({ path: "./.env" });
 connectDB();
 // 2) SETTING PORT AND LISTEN SEVER
 const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(
         'Connected to MongoDB Server, WebService running on port '+PORT
     );
