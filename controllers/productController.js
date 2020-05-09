@@ -1,4 +1,4 @@
-const Product = require("../model/Product");
+const Product = require("../models/Product");
 const bodyParser = require("body-parser");
 module.exports.index = async (req, res) => {
   try {

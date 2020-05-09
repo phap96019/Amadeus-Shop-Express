@@ -9,6 +9,8 @@ const DB = process.env.DATABASE.replace(
 );
 
 const connectDB = () => {
+  //Configure mongoose's promise to global promise
+  mongoose.promise = global.Promise;
   mongoose
     .connect(DB, {
       useNewUrlParser: true,
