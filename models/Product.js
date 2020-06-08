@@ -4,10 +4,10 @@ const ProductSchema = mongoose.Schema({
     type: String,
     require: true,
   },
-  rating: {
-    type: Number,
-    default: 4.5,
-  },
+  // rating: {
+  //   type: Number,
+  //   default: 4.5,
+  // },
   img: {
     type: String,
     require: true,
@@ -36,6 +36,10 @@ const ProductSchema = mongoose.Schema({
   createAt: {
     type: Date,
     default: Date.now,
+  },
+  number: {
+    type: Number,
+    require: true,
   },
 });
 module.exports = mongoose.model("Product", ProductSchema);
