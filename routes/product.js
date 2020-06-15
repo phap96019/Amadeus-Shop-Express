@@ -5,5 +5,7 @@ const controller = require("../controllers/productController");
 
 router.get("/", controller.index);
 router.post("/", controller.post);
+router.delete("/:prodID", controller.delete);
+router.patch("/:prodID", controller.update);
 
 module.exports = router;
