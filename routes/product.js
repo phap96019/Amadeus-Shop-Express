@@ -7,5 +7,6 @@ router.get("/", controller.index);
 router.post("/", controller.post);
 router.delete("/:prodID", controller.delete);
 router.patch("/:prodID", controller.update);
+router.get("/:prodID", controller.getOne);
 
 module.exports = router;
