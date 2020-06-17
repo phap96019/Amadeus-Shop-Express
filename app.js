@@ -4,7 +4,7 @@ const path = require("path");
 const productRouter = require("./routes/product");
 const reviewRoute = require("./routes/review");
 const bodyParser = require("body-parser");
-//const cros = require("cors"); khi nào code xong frontend sẽ cần
+const cros = require("cors"); khi nào code xong frontend sẽ cần
 const cors = require("cors");
 const passport = require("passport");
 
@@ -12,7 +12,7 @@ dotenv.config({ path: "./.env" });
 
 const app = express();
 app.use(bodyParser.json());
-//app.use(cros());
+app.use(cros());
 // 1) GLOBAL MIDDLEWARES
 
 //Serving static files
@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // 2) ROUTES
 app.get("/", (req, res) => {
-  return res.send("Welcome to Amadeus!");
+  return res.send("Welcome to Amadeus v2!");
 });
 app.use("/products", productRouter);
 app.use("/reviews", reviewRoute);
