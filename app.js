@@ -4,7 +4,7 @@ const path = require("path");
 const productRouter = require("./routes/product");
 const reviewRoute = require("./routes/review");
 const bodyParser = require("body-parser");
-const cros = require("cors"); khi nào code xong frontend sẽ cần
+const cros = require("cors");
 const cors = require("cors");
 const passport = require("passport");
 
