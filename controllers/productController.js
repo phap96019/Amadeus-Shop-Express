@@ -25,7 +25,6 @@ module.exports.post = async (req, res) => {
   } catch (err) {
     res.json({ message: err });
   }
-  console.log(req.body);
 };
 module.exports.delete = async (req, res) => {
   try {
