@@ -24,7 +24,7 @@ module.exports.get = async (req, res) => {
   const reviews = await Review.find({
     productId: req.params.ReviewId,
   })
-    .populate({ path: "userId", select: "username", model: Users })
+    .populate({ path: "userId", select: "username nickname numphone" , model: Users })
     .exec((err, review) => {
       if (err) console.log(err);
       res.status(200).json(review);

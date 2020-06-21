@@ -6,12 +6,14 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const Token = require('./token');
 
+
 const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         unique: true,
         required: 'Your email is required',
-        trim: true
+        trim: true,
+        lowercase: true
     },
 
     username: {
@@ -33,7 +35,7 @@ const UserSchema = new mongoose.Schema({
     },
 
     numphone: {
-        type: String,
+        type: Number,
         required: false,
         max: 255
     },
@@ -58,8 +60,7 @@ const UserSchema = new mongoose.Schema({
 
     profileImage: {
         type: String,
-        required: false,
-        max: 255
+        required: false
     },
 
     isVerified: {
@@ -128,7 +129,7 @@ UserSchema.methods.generateJWTrefresh = function() {
     };
 
     return jwt.sign(payload, process.env.JWT_SECRET_REFRESH, {
-        expiresIn: parseInt(expirationDate.getTime() / 1000, 10)
+        expiresIn: '43200m' //expires in 30d
     });
 };
 UserSchema.methods.generatePasswordReset = function() {
@@ -144,6 +145,7 @@ UserSchema.methods.generateVerificationToken = function() {
 
     return new Token(payload);
 };
+
 
 mongoose.set('useFindAndModify', false);
 module.exports = mongoose.model('Users', UserSchema);
