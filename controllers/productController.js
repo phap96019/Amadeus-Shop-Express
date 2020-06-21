@@ -25,7 +25,6 @@ module.exports.post = async (req, res) => {
   } catch (err) {
     res.json({ message: err });
   }
-  console.log(req.body);
 };
 module.exports.delete = async (req, res) => {
   try {
@@ -53,4 +52,11 @@ module.exports.update = async (req, res) => {
   } catch (err) {
     res.json({ message: err });
   }
+};
+
+module.exports.getOne = async (req, res) => {
+  const product = await Product.findOne({ _id: req.params.prodID }).populate(
+    "reviews"
+  );
+  res.json(product);
 };

@@ -36,6 +36,7 @@
         "session": "^0.1.0"
   },
   "devDependencies": {
+<<<<<<< HEAD
         "nodemon": "^2.0.3",
         "babel-cli": "^6.26.0",
         "babel-preset-env": "^1.7.0",
@@ -53,3 +54,22 @@
   "author": "",
   "license": "ISC"
 }
+=======
+    "nodemon": "^2.0.3",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^6.8.0"
+  },
+  "scripts": {
+    "server": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "release": "npm run clean && npm run build && npm run serve",
+    "clean": "rm -rf dist && mkdir dist",
+    "serve": "node dist/server.js",
+    "dev": "nodemon server.js --presets env"
+  },
+  "author": "",
+  "license": "ISC"
+}
+>>>>>>> 1788947699bde3a9871f89c024776c3ae1d0d0e3
