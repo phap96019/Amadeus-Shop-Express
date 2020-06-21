@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const productRouter = require("./routes/product");
 const reviewRoute = require("./routes/review");
+const orderRoute = require("./routes/order");
 const bodyParser = require("body-parser");
 const cros = require("cors");
 const cors = require("cors");
@@ -24,7 +25,7 @@ app.get("/", (req, res) => {
 });
 app.use("/products", productRouter);
 app.use("/reviews", reviewRoute);
-
+app.use("/order", orderRoute);
 //=== 1 - CREATE APP
 // Creating express app and configuring middleware needed for authentication
 app.use(cors());
