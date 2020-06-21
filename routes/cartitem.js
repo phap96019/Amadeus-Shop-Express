@@ -17,9 +17,10 @@ router.post('/itemshowone', CartItem.itemShowOne);
 //GET Cart 
 router.get('/itemshowall', CartItem.itemShowAll);
 
-//DELETE Cart Item
+//DELETE an Item
 router.delete('/destroyitem', CartItem.destroyItems);
 
+//DELETE All Items in Cart
 router.delete('/destroycart', CartItem.destroyAllItems);
 
 module.exports = router;
