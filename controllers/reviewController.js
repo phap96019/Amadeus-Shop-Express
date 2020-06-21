@@ -23,11 +23,10 @@ module.exports.post = async (req, res) => {
 module.exports.get = async (req, res) => {
   const reviews = await Review.find({
     productId: req.params.ReviewId,
-  });
-  res.json(reviews);
-  // .populate({ path: "userId", select: "username", model: Users })
-  // .exec((err, review) => {
-  //   if (err) console.log(err);
-  //   res.status(200).json(review);
-  // });
+  })
+    .populate({ path: "userId", select: "username", model: Users })
+    .exec((err, review) => {
+      if (err) console.log(err);
+      res.status(200).json(review);
+    });
 };
