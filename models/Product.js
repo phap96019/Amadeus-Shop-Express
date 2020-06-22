@@ -5,6 +5,10 @@ const ProductSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    nameURL: {
+      type: String,
+      require: true,
+    },
     // rating: {
     //   type: Number,
     //   default: 4.5,

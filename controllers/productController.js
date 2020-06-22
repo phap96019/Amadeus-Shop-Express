@@ -11,7 +11,9 @@ module.exports.index = async (req, res) => {
 module.exports.post = async (req, res) => {
   const product = new Product({
     name: req.body.name,
+    nameURL: req.body.nameURL,
     img: req.body.img,
+    imgHD: req.body.imgHD,
     decription: req.body.decription,
     conf: req.body.conf,
     category: req.body.category,
@@ -40,7 +42,9 @@ module.exports.update = async (req, res) => {
     const updateProduct = await Product.updateOne(
       { _id: req.params.prodID },
       { $set: { name: req.body.name } },
+      { $set: { nameURL: req.body.nameURL } },
       { $set: { img: req.body.img } },
+      { $set: { imgHD: req.body.imgHD } },
       { $set: { decription: req.body.decription } },
       { $set: { conf: req.body.conf } },
       { $set: { category: req.body.category } },
@@ -55,8 +59,8 @@ module.exports.update = async (req, res) => {
 };
 
 module.exports.getOne = async (req, res) => {
-  const product = await Product.findOne({ _id: req.params.prodID }).populate(
-    "reviews"
-  );
+  const product = await Product.findOne({
+    nameURL: req.params.prodID,
+  }).populate("reviews");
   res.json(product);
 };
