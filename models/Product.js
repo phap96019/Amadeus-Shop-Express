@@ -17,6 +17,10 @@ const ProductSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    imgHD: {
+      type: String,
+      require: true,
+    },
     decription: {
       type: String,
       require: true,
