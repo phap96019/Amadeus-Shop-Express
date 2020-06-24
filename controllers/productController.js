@@ -8,10 +8,33 @@ module.exports.index = async (req, res) => {
     res.json({ message: err });
   }
 };
+//========Chuyển dạng
+const toSlug = str => {
+  str = str.toLowerCase();
+  str = str.replace(/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/g, "a");
+  str = str.replace(/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/g, "e");
+  str = str.replace(/(ì|í|ị|ỉ|ĩ)/g, "i");
+  str = str.replace(/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/g, "o");
+  str = str.replace(/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/g, "u");
+  str = str.replace(/(ỳ|ý|ỵ|ỷ|ỹ)/g, "y");
+  str = str.replace(/(đ)/g, "d");
+  // Xóa ký tự đặc biệt
+  str = str.replace(/([^0-9a-z-\s])/g, "");
+  // Xóa khoảng trắng thay bằng ký tự -
+  str = str.replace(/(\s+)/g, "-");
+  // xóa phần dự - ở đầu
+  str = str.replace(/^-+/g, "");
+  // xóa phần dư - ở cuối
+  str = str.replace(/-+$/g, "");
+  // return
+  return str;
+};
+//===================
 module.exports.post = async (req, res) => {
+  const nameURL = toSlug(req.body.name);
   const product = new Product({
     name: req.body.name,
-    nameURL: req.body.nameURL,
+    nameURL: nameURL,
     img: req.body.img,
     imgHD: req.body.imgHD,
     decription: req.body.decription,
@@ -63,4 +86,12 @@ module.exports.getOne = async (req, res) => {
     nameURL: req.params.prodID,
   }).populate("reviews");
   res.json(product);
+};
+
+module.exports.search = async (req, res) => {
+  const keySearch2 = toSlug(req.body.keySearch);
+  const products = await Product.find({
+    nameURL: { $regex: keySearch2 },
+  });
+  res.send(products);
 };

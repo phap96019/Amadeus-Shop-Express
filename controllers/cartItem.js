@@ -1,164 +1,203 @@
-const User = require('../models/user');
-const CartItem = require('../models/cartItem');
+const User = require("../models/user");
+const CartItem = require("../models/cartItem");
 const Product = require("../models/Product");
 
-
-const sendEMail = require('../controllers/sendEmail');
-const {ObjectId} = require('mongodb');
-
-
+const sendEMail = require("../controllers/sendEmail");
+const { ObjectId } = require("mongodb");
 
 // @route PUT api/user/{id}
 // @desc Update event details
 // @access Public
 exports.cartItem = async function (req, res) {
-    try {
-        const itemsId = req.body.productId;
-        const count = req.body.count;
-        const userId = req.user._id;
-       
-        //Make sure the passed id is that of the logged in user
-        //if (userId.toString() !== id.toString()) return res.status(401).json({message: "Sorry, you don't have the permission to upd this data."});
-        if (!req.isAuthenticated()) return res.status(401).json({message: "Sorry, you don't have the permission to update this data."});
-        // if they aren't redirect them to the home page
-        // res.redirect('/');
+  try {
+    const itemsId = req.body.productId;
+    const count = req.body.count;
+    const userId = req.user._id;
 
-        // Make sure Item does already exist
-        const items = await Product.findById({_id: ObjectId(itemsId)});
+    //Make sure the passed id is that of the logged in user
+    //if (userId.toString() !== id.toString()) return res.status(401).json({message: "Sorry, you don't have the permission to upd this data."});
+    if (!req.isAuthenticated())
+      return res
+        .status(401)
+        .json({
+          message: "Sorry, you don't have the permission to update this data.",
+        });
+    // if they aren't redirect them to the home page
+    // res.redirect('/');
 
-        if (!items) return res.status(401).json({message: 'The Item does not already exist'});
+    // Make sure Item does already exist
+    const items = await Product.findById({ _id: ObjectId(itemsId) });
 
-        // Check the Item does already exist in Cart 
-        const _items = await CartItem.findOne({productId: ObjectId(itemsId)});
+    if (!items)
+      return res
+        .status(401)
+        .json({ message: "The Item does not already exist" });
 
-        if (!_items) {
-            const newCart = new CartItem({
-                userId: userId,
-                productId: itemsId,
-                count: count
-            });
+    // Check the Item does already exist in Cart
+    const _items = await CartItem.findOne({ productId: ObjectId(itemsId) });
 
-            await newCart.save();
-               
-            const _newcart = await CartItem.findOne({productId: ObjectId(itemsId)})
-                                            .populate({ path: 'productId', select: "name img price", model: Product });
+    if (!_items) {
+      const newCart = new CartItem({
+        userId: userId,
+        productId: itemsId,
+        count: count,
+      });
 
+      await newCart.save();
 
-            return res.status(200).json({_newcart, message: 'The item has been added to cart'});
-        }
+      const _newcart = await CartItem.findOne({
+        productId: ObjectId(itemsId),
+      }).populate({
+        path: "productId",
+        select: "name img price",
+        model: Product,
+      });
 
-        _items.count = _items.count + count;
-        if (_items.count < 0){
-            return res.status(500).json({message: 'Invalid count value'});
-        }
-        if (_items.count == 0) {
-            const removeItems = await CartItem.deleteOne({productId: ObjectId(itemsId)});
-            return res.status(200).json({message: 'The item has been deleted'});
-        }
-
-        await _items.save();
-               
-        const newcart_ = await CartItem.findOne({productId: ObjectId(itemsId)})
-                                        .populate({ path: 'productId', select: "name img price", model: Product });
-
-
-        //const cart = await CartItem.findByIdAndUpdate( {_id: ObjectId(id)}, {$set: count}, {new: true});
-
-        return res.status(200).json({newcart_, message: 'The item has been added to cart'});
-
-    } catch (error) {
-        
-        res.status(500).json({message: error.message});
+      return res
+        .status(200)
+        .json({ _newcart, message: "The item has been added to cart" });
     }
-};
 
+    _items.count = _items.count + count;
+    if (_items.count < 0) {
+      return res.status(500).json({ message: "Invalid count value" });
+    }
+    if (_items.count == 0) {
+      const removeItems = await CartItem.deleteOne({
+        productId: ObjectId(itemsId),
+      });
+      return res.status(200).json({ message: "The item has been deleted" });
+    }
+
+    await _items.save();
+
+    const newcart_ = await CartItem.findOne({
+      productId: ObjectId(itemsId),
+    }).populate({
+      path: "productId",
+      select: "name img price",
+      model: Product,
+    });
+
+    //const cart = await CartItem.findByIdAndUpdate( {_id: ObjectId(id)}, {$set: count}, {new: true});
+
+    return res
+      .status(200)
+      .json({ newcart_, message: "The item has been added to cart" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // @route POST api/user/{id}
 // @desc GET the Item details of user
 // @access Public
 exports.itemShowOne = async function (req, res) {
-    try {
-        const userId = req.user._id;
-        const itemsId = req.body.id;
-        
-        //Make sure the passed id is that of the logged in user
-        //if (userId.toString() !== id.toString()) return res.status(401).json({message: "Sorry, you don't have the permission to upd this data."});
-        if (!req.isAuthenticated()) return res.status(401).json({message: "Sorry, you don't have the permission to update this data."});
-        // if they aren't redirect them to the home page
-       // res.redirect('/');
+  try {
+    const userId = req.user._id;
+    const itemsId = req.body.id;
 
-        const items = await CartItem.findById({_id: ObjectId(itemsId)})
-                                    .populate({ path: 'productId', select: "name img price", model: Product });
+    //Make sure the passed id is that of the logged in user
+    //if (userId.toString() !== id.toString()) return res.status(401).json({message: "Sorry, you don't have the permission to upd this data."});
+    if (!req.isAuthenticated())
+      return res
+        .status(401)
+        .json({
+          message: "Sorry, you don't have the permission to update this data.",
+        });
+    // if they aren't redirect them to the home page
+    // res.redirect('/');
 
-        if (!items) return res.status(401).json({message: 'There are no items to display'});
+    const items = await CartItem.findById({ _id: ObjectId(itemsId) }).populate({
+      path: "productId",
+      select: "name img price",
+      model: Product,
+    });
 
-        res.status(200).json({items});
-    } catch (error) {
-        
-        res.status(500).json({message: error.message});
-    }
+    if (!items)
+      return res.status(401).json({ message: "There are no items to display" });
+
+    res.status(200).json({ items });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
-
 
 // @route GET api/user/{id}
 // @desc GET all Items in Cart
 // @access Public
 exports.itemShowAll = async function (req, res) {
-    try {
-        const userId = req.user._id;
-        
-        //Make sure the passed id is that of the logged in user
-        //if (userId.toString() !== id.toString()) return res.status(401).json({message: "Sorry, you don't have the permission to upd this data."});
-        if (!req.isAuthenticated()) return res.status(401).json({message: "Sorry, you don't have the permission to update this data."});
-        // if they aren't redirect them to the home page
-       // res.redirect('/');
+  try {
+    const userId = req.user._id;
 
-        const items = await CartItem.find({userId: userId})
-                                    .populate({ path: 'productId', select: "name img price", model: Product });
+    //Make sure the passed id is that of the logged in user
+    //if (userId.toString() !== id.toString()) return res.status(401).json({message: "Sorry, you don't have the permission to upd this data."});
+    if (!req.isAuthenticated())
+      return res
+        .status(401)
+        .json({
+          message: "Sorry, you don't have the permission to update this data.",
+        });
+    // if they aren't redirect them to the home page
+    // res.redirect('/');
 
+    const items = await CartItem.find({ userId: userId }).populate({
+      path: "productId",
+      select: "name nameURL img price",
+      model: Product,
+    });
 
-        if (!items) return res.status(401).json({message: 'There are no items to display'});
+    if (!items)
+      return res.status(401).json({ message: "There are no items to display" });
 
-        res.status(200).json({items});
-    } catch (error) {
-        
-        res.status(500).json({message: error.message});
-    }
+    res.status(200).json({ items });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 // @route DELETE api/user/{id}
 // @desc Delete The Item
 // @access Public
 exports.destroyItems = async function (req, res) {
-    try {
-        const itemsId = req.body.id;
+  try {
+    const itemsId = req.body.id;
 
-        //Make sure the passed id is that of the logged in user
-        //if (user_id.toString() !== id.toString()) return res.status(401).json({message: "Sorry, you don't have the permission to delete this data."});
-        if (!req.isAuthenticated()) return res.status(401).json({message: "Sorry, you don't have the permission to delete this data."});
+    //Make sure the passed id is that of the logged in user
+    //if (user_id.toString() !== id.toString()) return res.status(401).json({message: "Sorry, you don't have the permission to delete this data."});
+    if (!req.isAuthenticated())
+      return res
+        .status(401)
+        .json({
+          message: "Sorry, you don't have the permission to delete this data.",
+        });
 
-        await CartItem.findByIdAndDelete({_id: ObjectId(itemsId)});
-        res.status(200).json({message: 'The item has been deleted'});
-    } catch (error) {
-        res.status(500).json({message: error.message});
-    }
+    await CartItem.findByIdAndDelete({ _id: ObjectId(itemsId) });
+    res.status(200).json({ message: "The item has been deleted" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
-
 
 // @route DELETE api/user/{id}
 // @desc Delete All Items in Cart
 // @access Public
 exports.destroyAllItems = async function (req, res) {
-    try {
-        const userId = req.user._id;
+  try {
+    const userId = req.user._id;
 
-        //Make sure the passed id is that of the logged in user
-        //if (user_id.toString() !== id.toString()) return res.status(401).json({message: "Sorry, you don't have the permission to delete this data."});
-        if (!req.isAuthenticated()) return res.status(401).json({message: "Sorry, you don't have the permission to delete this data."});
+    //Make sure the passed id is that of the logged in user
+    //if (user_id.toString() !== id.toString()) return res.status(401).json({message: "Sorry, you don't have the permission to delete this data."});
+    if (!req.isAuthenticated())
+      return res
+        .status(401)
+        .json({
+          message: "Sorry, you don't have the permission to delete this data.",
+        });
 
-        await CartItem.deleteMany({userId: userId});
-        res.status(200).json({message: 'All the items in cart had been deleted'});
-    } catch (error) {
-        res.status(500).json({message: error.message});
-    }
+    await CartItem.deleteMany({ userId: userId });
+    res.status(200).json({ message: "All the items in cart had been deleted" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
