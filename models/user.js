@@ -113,9 +113,15 @@ UserSchema.methods.generateJWT = function () {
     username: this.username,
   };
 
+<<<<<<< HEAD
   return jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: "15m",
   });
+=======
+    return jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: '43200m' //expires in 30d
+    });
+>>>>>>> 2b98484eb69988827a236caac28659ae67361438
 };
 
 UserSchema.methods.generateJWTrefresh = function () {
