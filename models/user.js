@@ -16,12 +16,6 @@ const UserSchema = new mongoose.Schema(
       lowercase: true,
     },
 
-    username: {
-      type: String,
-      unique: true,
-      required: "Your username is required",
-    },
-
     password: {
       type: String,
       required: "Your password is required",
@@ -148,4 +142,4 @@ UserSchema.methods.generateVerificationToken = function () {
 };
 
 mongoose.set("useFindAndModify", false);
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("Users", UserSchema);
