@@ -142,4 +142,4 @@ UserSchema.methods.generateVerificationToken = function () {
 };
 
 mongoose.set("useFindAndModify", false);
-module.exports = mongoose.model("Users", UserSchema);
+module.exports = mongoose.model("User", UserSchema); //ĐỪNG CÓ SỬA CÁI NÀY NỮA, T SỬA 3 LẦN RỒI
