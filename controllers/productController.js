@@ -42,6 +42,7 @@ module.exports.post = async (req, res) => {
     category: req.body.category,
     producer: req.body.producer,
     price: req.body.price,
+    priceFake: req.body.priceFake,
     number: req.body.number,
   });
   try {
@@ -62,19 +63,13 @@ module.exports.delete = async (req, res) => {
 
 module.exports.update = async (req, res) => {
   try {
-    const updateProduct = await Product.updateOne(
+    const updateProduct = await Product.findOneAndUpdate(
       { _id: req.params.prodID },
-      { $set: { name: req.body.name } },
-      { $set: { nameURL: req.body.nameURL } },
-      { $set: { img: req.body.img } },
-      { $set: { imgHD: req.body.imgHD } },
-      { $set: { decription: req.body.decription } },
-      { $set: { conf: req.body.conf } },
-      { $set: { category: req.body.category } },
-      { $set: { producer: req.body.producer } },
-      { $set: { price: req.body.price } },
-      { $set: { number: req.body.number } }
+      req.body,
+      { new: true }
     );
+    console.log(updateProduct.priceFake);
+
     res.json(updateProduct);
   } catch (err) {
     res.json({ message: err });
