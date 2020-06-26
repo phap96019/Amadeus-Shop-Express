@@ -15,6 +15,7 @@ router.get('/', User.index);
 //STORE
 router.post('/', [
     check('email').isEmail().withMessage('Enter a valid email address'),
+    check('username').not().isEmpty().withMessage('Your username is required'),
 ], validate, User.store);
 
 //SHOW
