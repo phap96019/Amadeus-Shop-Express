@@ -42,6 +42,11 @@ const ProductSchema = mongoose.Schema(
       type: Number,
       require: true,
     },
+    priceFake: {
+      type: Number,
+      require: true,
+      default: 0,
+    },
     createAt: {
       type: Date,
       default: Date.now,

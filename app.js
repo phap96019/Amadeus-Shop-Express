@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // 2) ROUTES
 app.get("/", (req, res) => {
-  return res.send("Welcome to Amadeus v3!");
+  return res.send("Welcome to Amadeus v4!");
 });
 app.use("/products", productRouter);
 app.use("/reviews", reviewRoute);
