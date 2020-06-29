@@ -77,10 +77,18 @@ module.exports.update = async (req, res) => {
 };
 
 module.exports.getOne = async (req, res) => {
-  const product = await Product.findOne({
+  let product = await Product.findOne({
     nameURL: req.params.prodID,
   }).populate("reviews");
-  res.json(product);
+  const reviews = product.reviews;
+  let vote = reviews.reduce((a, b) => {
+    return a + b.vote;
+  }, 0);
+  vote = vote / reviews.length;
+  vote = Math.round(vote * 100) / 100;
+  let productRes = product;
+  productRes.vote = vote;
+  res.json(productRes);
 };
 
 module.exports.search = async (req, res) => {
