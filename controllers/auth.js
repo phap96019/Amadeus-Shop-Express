@@ -35,8 +35,6 @@ exports.register = async (req, res) => {
 // @route POST api/auth/login
 // @desc Login user and return JWT token
 // @access Public
-
-
 exports.login = async  (req, res) => {
     try {
         const { email, password } = req.body;
@@ -101,7 +99,7 @@ exports.refreshToken = async  (req, res) => {
 //@access Publish
 exports.logout = async  (req, res) => {
     try {
-        const removeToken = await RefreshToken.deleteOne({token: req.body.token});
+        await RefreshToken.deleteOne({token: req.body.token});
         res.sendStatus(204);
     } catch (error) {
         res.status(500).json({message: error.message})

@@ -30,4 +30,7 @@ router.get('/image/:filename', uploadImage.displayImage);
 //DELETE
 router.delete('/destroy', User.destroy);
 
+//Change Password
+router.post('/changepassword', User.changePassword);
+
 module.exports = router;

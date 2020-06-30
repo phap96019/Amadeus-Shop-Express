@@ -173,6 +173,7 @@ exports.destroyItems = async function (req, res) {
         });
 
     await CartItem.findByIdAndDelete({ _id: ObjectId(itemsId) });
+    
     res.status(200).json({ message: "The item has been deleted" });
   } catch (error) {
     res.status(500).json({ message: error.message });

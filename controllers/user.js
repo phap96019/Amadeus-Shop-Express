@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const sendEMail = require('../controllers/sendEmail');
+const RefreshToken = require('../models/refreshtoken');
 
 
 // @route GET admin/user
@@ -124,3 +125,36 @@ exports.destroy = async function (req, res) {
 };
 
 
+
+// @route POST api/user/changepassword
+// @desc Change Password 
+// @access Public
+exports.changePassword = async  (req, res) => {
+    try {
+        const { password, newpassword } = req.body;
+        const userId = req.user._id;
+        
+        //Make sure the passed id is that of the logged in user
+        //if (userId.toString() !== id.toString()) return res.status(401).json({message: "Sorry, you don't have the permission to upd this data."});
+        if (!req.isAuthenticated()) return res.status(401).json({message: "Sorry, you don't have the permission to update this data."});
+        // if they aren't redirect them to the home page
+       // res.redirect('/');
+
+        const user = await User.findById(userId);
+
+        //validate password
+        if (!user.comparePassword(password)) return res.status(401).json({message: 'Invalid password'});
+
+        //Set the new password
+        user.password = newpassword;
+        
+        // Save the updated user object
+        await user.save();
+
+        await RefreshToken.deleteOne({userId: userId});
+
+        return res.status(200).json({message: 'Password has been changed, please sign in again.'});
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+};

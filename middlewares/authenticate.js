@@ -1,7 +1,7 @@
 const passport = require("passport");
 
 module.exports = (req, res, next) => {
-    const token = req.header('Authorization').replace('Bearer ', '');
+    //const token = req.header('Authorization').replace('Bearer ', '');
 
     passport.authenticate('jwt', function(err, user, info) {
         if (err) return next(err);

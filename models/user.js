@@ -6,14 +6,13 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const Token = require("./token");
 
-const UserSchema = new mongoose.Schema(
-  {
+const UserSchema = new mongoose.Schema({
     email: {
-      type: String,
-      unique: true,
-      required: "Your email is required",
-      trim: true,
-      lowercase: true,
+        type: String,
+        unique: true,
+        required: 'Your email is required',
+        trim: true,
+        lowercase: true
     },
 
     username: {
@@ -21,65 +20,63 @@ const UserSchema = new mongoose.Schema(
         unique: true,
         required: 'Your username is required',
     },
-    
+
     password: {
-      type: String,
-      required: "Your password is required",
-      max: 100,
+        type: String,
+        required: 'Your password is required',
+        max: 100
     },
 
     nickname: {
-      type: String,
-      required: false,
-      max: 255,
+        type: String,
+        required: false,
+        max: 255
     },
 
     numphone: {
-      type: Number,
-      required: false,
-      max: 255,
+        type: Number,
+        required: false,
+        max: 255
     },
 
     sex: {
-      type: String,
-      required: false,
-      max: 255,
+        type: String,
+        required: false,
+        max: 255
     },
-
+    
     datebirth: {
-      type: String,
-      required: false,
-      max: 255,
+        type: String,
+        required: false,
+        max: 255
     },
 
     address: {
-      type: String,
-      required: false,
-      max: 255,
+        type: String,
+        required: false,
+        max: 255
     },
 
     profileImage: {
-      type: String,
-      required: false,
+        type: String,
+        required: false
     },
 
     isVerified: {
-      type: Boolean,
-      default: false,
+        type: Boolean,
+        default: false
     },
-
+    
     resetPasswordToken: {
-      type: String,
-      required: false,
+        type: String,
+        required: false
     },
 
     resetPasswordExpires: {
-      type: Date,
-      required: false,
-    },
-  },
-  { timestamps: true }
-);
+        type: Date,
+        required: false
+    }
+}, {timestamps: true});
 
 UserSchema.pre("save", function (next) {
   const user = this;
