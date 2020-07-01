@@ -2,8 +2,17 @@ const Product = require("../models/Product");
 const bodyParser = require("body-parser");
 module.exports.index = async (req, res) => {
   try {
-    const product = await Product.find();
-    res.json(product);
+    if (!req.body.page) {
+      const product = await Product.find();
+      res.status(200).json(product);
+    } else {
+      console.log(req.body.page);
+
+      const product = await Product.find()
+        .limit(18)
+        .skip((req.body.page - 1) * 18);
+      res.status(200).json(product);
+    }
   } catch (err) {
     res.json({ message: err });
   }
