@@ -7,5 +7,6 @@ router.get("/", controller.index);
 // router.get("/get", authenticate, controller.getAllOrder);
 router.post("/post", authenticate, controller.postNewOrder);
 router.get("/get", authenticate, controller.getAllOrderUser);
+router.get("/get-all", controller.getAllOrder);
 
 module.exports = router;

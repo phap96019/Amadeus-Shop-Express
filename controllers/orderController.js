@@ -53,7 +53,7 @@ module.exports.postNewOrder = async (req, res) => {
         { userId: req.user._id },
         err => {}
       );
-      res.status(200).json({ message: "create order success" });
+      res.status(201).json({ message: "create order success" });
     } catch (err) {
       res.json({ message: err });
     }
@@ -61,6 +61,35 @@ module.exports.postNewOrder = async (req, res) => {
 };
 
 module.exports.getAllOrderUser = async (req, res) => {
-  const items = await Order.find({ userId: req.user._id });
-  res.json(items);
+  let items = await Order.find({ userId: req.user._id });
+  let order = items.map(item => {
+    //date = new Date("2013-08-03T02:00:00Z");
+    year = item.createAt.getFullYear();
+    month = item.createAt.getMonth() + 1;
+    dt = item.createAt.getDate();
+
+    if (dt < 10) {
+      dt = "0" + dt;
+    }
+    if (month < 10) {
+      month = "0" + month;
+    }
+
+    date = year + "-" + month + "-" + dt;
+    return {
+      paid: item.paid,
+      _id: item._id,
+      userId: item.userId,
+      email: item.email,
+      products: item.products,
+      total: item.total,
+      createAt: date,
+    };
+  });
+  res.status(200).json(order);
+};
+
+module.exports.getAllOrder = async (req, res) => {
+  const allOrder = await Order.find({ paid: false });
+  res.status(200).json(allOrder);
 };
