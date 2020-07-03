@@ -63,7 +63,7 @@ module.exports.postNewOrder = async (req, res) => {
 module.exports.getAllOrderUser = async (req, res) => {
   let items = await Order.find({ userId: req.user._id }).populate({
     path: "products.productId",
-    select: "name price img",
+    select: "name price img nameURL",
   });
   let order = items.map(item => {
     //date = new Date("2013-08-03T02:00:00Z");
