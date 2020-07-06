@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const cros = require("cors");
 const cors = require("cors");
 const passport = require("passport");
+const cookieParser = require('cookie-parser');
 
 dotenv.config({ path: "./.env" });
 
@@ -38,9 +39,12 @@ app.use(express.urlencoded({ extended: false }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
+app.use(cookieParser()); //Parse cookie
+
 //=== 3 - INITIALIZE PASSPORT MIDDLEWARE
 app.use(passport.initialize());
 require("./middlewares/jwt")(passport);
+require('./config/passport')(passport);
 
 //=== 4 - CONFIGURE ROUTES
 //Configure Route

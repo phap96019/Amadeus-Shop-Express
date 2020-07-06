@@ -34,7 +34,7 @@ exports.cartItem = async function (req, res) {
         .json({ message: "The Item does not already exist" });
 
     // Check the Item does already exist in Cart
-    const _items = await CartItem.findOne({ productId: ObjectId(itemsId) });
+    const _items = await CartItem.findOne({ productId: ObjectId(itemsId), userId: userId });
 
     if (!_items) {
       const newCart = new CartItem({
@@ -46,7 +46,7 @@ exports.cartItem = async function (req, res) {
       await newCart.save();
 
       const _newcart = await CartItem.findOne({
-        productId: ObjectId(itemsId),
+        productId: ObjectId(itemsId), userId: userId
       }).populate({
         path: "productId",
         select: "name img price",
@@ -64,7 +64,7 @@ exports.cartItem = async function (req, res) {
     }
     if (_items.count == 0) {
       const removeItems = await CartItem.deleteOne({
-        productId: ObjectId(itemsId),
+        productId: ObjectId(itemsId), userId: userId
       });
       return res.status(200).json({ message: "The item has been deleted" });
     }
@@ -72,20 +72,19 @@ exports.cartItem = async function (req, res) {
     await _items.save();
 
     const newcart_ = await CartItem.findOne({
-      productId: ObjectId(itemsId),
+      productId: ObjectId(itemsId), userId: userId
     }).populate({
       path: "productId",
       select: "name img price",
       model: Product,
     });
 
-    //const cart = await CartItem.findByIdAndUpdate( {_id: ObjectId(id)}, {$set: count}, {new: true});
-
     return res
       .status(200)
       .json({ newcart_, message: "The item has been added to cart" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.
+    status(500).json({ message: error.message });
   }
 };
 

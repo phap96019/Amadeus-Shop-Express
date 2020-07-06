@@ -107,7 +107,6 @@ UserSchema.methods.generateJWT = function () {
   let payload = {
     id: this._id,
     email: this.email,
-    username: this.username,
   };
 
   return jwt.sign(payload, process.env.JWT_SECRET, {
@@ -123,7 +122,6 @@ UserSchema.methods.generateJWTrefresh = function () {
   let payload = {
     id: this._id,
     email: this.email,
-    username: this.username,
   };
 
   return jwt.sign(payload, process.env.JWT_SECRET_REFRESH, {
