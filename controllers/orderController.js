@@ -53,7 +53,9 @@ module.exports.postNewOrder = async (req, res) => {
         { userId: req.user._id },
         err => {}
       );
-      res.status(201).json({ message: "create order success" });
+      res
+        .status(201)
+        .json({ message: "create order success", orderId: saveOrder._id });
     } catch (err) {
       res.json({ message: err });
     }

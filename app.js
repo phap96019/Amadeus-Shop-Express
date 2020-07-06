@@ -4,6 +4,7 @@ const path = require("path");
 const productRouter = require("./routes/product");
 const reviewRoute = require("./routes/review");
 const orderRoute = require("./routes/order");
+const paymentRoute = require("./routes/payment");
 const bodyParser = require("body-parser");
 const cros = require("cors");
 const cors = require("cors");
@@ -21,11 +22,12 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // 2) ROUTES
 app.get("/", (req, res) => {
-  return res.send("Welcome to Amadeus v4!");
+  return res.send("Welcome to Amadeus v5!");
 });
 app.use("/products", productRouter);
 app.use("/reviews", reviewRoute);
 app.use("/order", orderRoute);
+app.use("/payment", paymentRoute);
 //=== 1 - CREATE APP
 // Creating express app and configuring middleware needed for authentication
 app.use(cors());
