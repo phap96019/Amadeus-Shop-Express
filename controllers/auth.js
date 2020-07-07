@@ -2,6 +2,8 @@ require('dotenv').config();
 
 const jwt = require('jsonwebtoken')
 const User = require('../models/user');
+const Admin = require('../models/admin');
+
 const Token = require('../models/token');
 const RefreshToken = require('../models/refreshtoken');
 
@@ -175,3 +177,96 @@ async function sendVerificationEmail(user, req, res){
         res.status(500).json({message: error.message})
     }
 }
+
+
+// @route POST api/auth/register
+// @desc Register Admin
+// @access Public
+exports.registerAdmin = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        // Make sure this account doesn't already exist
+        const admin = await Admin.findOne({ email });
+
+        if (admin) return res.status(401).json({message: 'The email address you have entered is already associated with another account.'});
+
+        const newAdmin = new Admin({ ...req.body, role: "basic" });
+
+        const admin_ = await newAdmin.save();
+
+        admin_.isAdmin = true;
+    
+        await newAdmin.save();
+
+        //await sendVerificationEmail(admin_, req, res);
+        res.status(200).json({admin_});
+
+    } catch (error) {
+        res.status(500).json({success: false, message: error.message})
+    }
+};
+
+
+// @route POST api/auth/login
+// @desc Login Admin and return JWT token
+// @access Public
+exports.loginAdmin = async  (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        const admin = await Admin.findOne({ username });
+
+        if (!admin) return res.status(401).json({msg: 'The username ' + username + ' is not associated with any account.'});
+
+        //validate password
+        if (!admin.comparePassword(password)) return res.status(401).json({message: 'Invalid email or password'});
+
+        // Make sure the user has been verified
+        if (!admin.isAdmin) return res.status(401).json({ type: 'not-Admin', message: 'Your account has not been Admin.' });
+
+        // Login successful, write token, and send back user
+        const refreshToken = admin.generateJWTrefresh();
+        const checkToken = await RefreshToken.findOne({token: refreshToken});
+        if (checkToken)return res.status(401).json({msg: 'The login process has encountered an error, please log in again'});
+
+        const newRefreshToken = new RefreshToken({
+            userId: admin._id,
+            token: refreshToken
+        });
+
+        await newRefreshToken.save();
+
+        res.status(200).json({accessToken: admin.generateJWT(), refreshToken: newRefreshToken.token, admin: admin});
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+};
+
+
+//@route POST api/auth/refreshtoken
+//@desc Refresh Token
+//@access Private
+exports.refreshTokenAdmin = async  (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const admin = await Admin.findOne({ email });
+        
+        const refreshToken = req.body.token;
+
+        if (refreshToken == null) return res.sendStatus(401).json({message: 'Error refreshToken null'});
+
+        const checkToken = await RefreshToken.findOne({token: refreshToken});
+
+        if (!checkToken) return res.sendStatus(403).json({message: 'The refreshToken has expired'});
+
+        // verify and generate new access token
+        jwt.verify(checkToken.token, process.env.JWT_SECRET_REFRESH, (err) => {
+            if (err) return res.sendStatus(403).json({message: 'Authentication error. Please check out the refresh token'});
+            res.json({ accessToken: admin.generateJWT() });
+          });
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+};

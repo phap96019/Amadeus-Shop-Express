@@ -21,6 +21,20 @@ router.post("/login", [
     check('password').not().isEmpty(),
 ], validate, Auth.login);
 
+
+// //Admin
+// router.post('/admin/register', [
+//     check('email').isEmail().withMessage('Enter a valid email address'),
+//     check('username').not().isEmpty().withMessage('Your username is required'),
+//     check('password').not().isEmpty().isLength({min: 6}).withMessage('Must be at least 6 chars long'),
+// ], validate, Auth.registerAdmin);
+
+router.post("/admin/login", [
+    check('username').not().isEmpty().withMessage('Enter a valid username'),
+    check('password').not().isEmpty(),
+], validate, Auth.loginAdmin);
+
+
 //EMAIL Verification
 router.get('/verify/:token', Auth.verify);
 router.post('/resend', Auth.resendToken);
