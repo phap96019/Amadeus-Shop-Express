@@ -5,7 +5,7 @@ const controller = require("../controllers/productController");
 
 router.get("/", controller.index);
 router.post("/", controller.post);
-router.get("/search", controller.search);
+router.post("/search", controller.search);
 router.delete("/:prodID", controller.delete);
 router.patch("/:prodID", controller.update);
 router.get("/:prodID", controller.getOne);
