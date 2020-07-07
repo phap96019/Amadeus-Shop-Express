@@ -23,7 +23,7 @@ module.exports.postNewOrder = async (req, res) => {
     };
   });
 
-  if (cart.length == 0) res.json("Cart is empty");
+  if (cart.length == 0) res.status(400).json({ message: "Cart is empty" });
   else {
     let totalPrice = 0;
     if (cart.length > 1) {
