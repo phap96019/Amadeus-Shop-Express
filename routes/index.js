@@ -3,6 +3,8 @@ const socialAuth = require('./socialAuth');
 const user = require('./user');
 const normal = require('./normal');
 const cartItem = require('./cartitem');
+const Admin = require('./admin');
+
 
 const authenticate = require('../middlewares/authenticate');
 const passport = require('passport');
@@ -17,6 +19,7 @@ module.exports = app => {
     app.use('/api/normal', normal);
     app.use('/api/cart', authenticate, cartItem);
     app.use('/api/social', socialAuth);
+    app.use('/api/admin', Admin);
 
     // =====================================
     // FACEBOOK ROUTES =====================

@@ -10,7 +10,7 @@ const router = express.Router();
 
 
 //INDEX
-router.get('/', User.index);
+router.get('/showalluser', User.index);
 
 //STORE
 router.post('/', [

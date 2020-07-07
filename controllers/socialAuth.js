@@ -11,7 +11,7 @@ const RefreshToken = require('../models/refreshtoken');
 // @access Public
 exports.facebookLogin = async  (req, res) => {
     try {
-        const _id = req.body._id
+        const _id = req.body.id
             
         const user = await User.findById(_id);
 
