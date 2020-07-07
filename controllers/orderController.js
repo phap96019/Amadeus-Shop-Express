@@ -95,6 +95,6 @@ module.exports.getAllOrderUser = async (req, res) => {
 };
 
 module.exports.getAllOrder = async (req, res) => {
-  const allOrder = await Order.find({ paid: false });
+  const allOrder = await Order.find();
   res.status(200).json(allOrder);
 };
