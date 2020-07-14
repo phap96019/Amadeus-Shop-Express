@@ -66,6 +66,7 @@ module.exports.resolve = async (req, res) => {
   console.log(req.body.orderId);
   try {
     const order = await Order.findOneAndUpdate(
+      { _id: req.body.orderId },
       { paid: true }
       // { new: true }
     );
