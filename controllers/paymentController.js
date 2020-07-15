@@ -63,7 +63,6 @@ module.exports.index = async (req, res) => {
 };
 
 module.exports.resolve = async (req, res) => {
-  console.log(req.body.orderId);
   try {
     const order = await Order.findOneAndUpdate(
       { _id: req.body.orderId },
