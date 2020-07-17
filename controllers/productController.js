@@ -1,5 +1,6 @@
 const Product = require("../models/Product");
 const bodyParser = require("body-parser");
+const CartItem = require("../models/cartItem");
 module.exports.index = async (req, res) => {
   try {
     if (!req.body.page) {
@@ -63,8 +64,11 @@ module.exports.post = async (req, res) => {
 };
 module.exports.delete = async (req, res) => {
   try {
+    const removeAllCart = await CartItem.deleteMany({
+      productId: req.params.prodID,
+    });
     const removeProduct = await Product.remove({ _id: req.params.prodID });
-    res.json(removeProduct);
+    // res.json(removeProduct);
   } catch (err) {
     res.json({ message: err });
   }
@@ -86,18 +90,26 @@ module.exports.update = async (req, res) => {
 };
 
 module.exports.getOne = async (req, res) => {
-  let product = await Product.findOne({
-    nameURL: req.params.prodID,
-  }).populate("reviews");
-  const reviews = product.reviews;
-  let vote = reviews.reduce((a, b) => {
-    return a + b.vote;
-  }, 0);
-  vote = vote / reviews.length;
-  vote = Math.round(vote * 100) / 100;
-  let productRes = product;
-  productRes.vote = vote;
-  res.json(productRes);
+  try {
+    let product = await Product.findOne({
+      nameURL: req.params.prodID,
+    }).populate("reviews");
+    if (!product) {
+      res.status(404).json({ message: "Not found" });
+    } else {
+      const reviews = product.reviews;
+      let vote = reviews.reduce((a, b) => {
+        return a + b.vote;
+      }, 0);
+      vote = vote / reviews.length;
+      vote = Math.round(vote * 100) / 100;
+      let productRes = product;
+      productRes.vote = vote;
+      res.json(productRes);
+    }
+  } catch (error) {
+    res.status(404).json({ message: error });
+  }
 };
 
 module.exports.search = async (req, res) => {
